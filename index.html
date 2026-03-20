@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>成人 ADHD 自评测试（非诊断）</title>
+  <style>
+    :root{
+  /* 亮黄色渐变主题（更明亮、偏白天） */
+  --bg:#fff8e1;          /* 浅黄底 */
+  --card:#ffffff;        /* 卡片白 */
+  --text:#3b2f1e;        /* 深棕文字 */
+  --muted:#7a6548;       /* 次级文字 */
+
+  --accent:#facc15;      /* 明黄 */
+  --accent-2:#fde047;    /* 浅黄 */
+  --accent-3:#f59e0b;    /* 琥珀 */
+  --accent-4:#fbbf24;    /* 金黄 */
+
+  --good:#22c55e;
+  --warn:#f59e0b;
+  --bad:#ef4444;
+  --line:rgba(0,0,0,.10);
+}
+    *{box-sizing:border-box}
+    body{
+  margin:0;
+  font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+  background:
+    radial-gradient(900px 600px at 10% 10%, rgba(250,204,21,.35), transparent 60%),
+    radial-gradient(900px 600px at 90% 15%, rgba(253,224,71,.45), transparent 60%),
+    radial-gradient(900px 600px at 20% 90%, rgba(251,191,36,.35), transparent 65%),
+    radial-gradient(900px 600px at 80% 85%, rgba(245,158,11,.30), transparent 65%),
+    linear-gradient(180deg, #fffdf5 0%, #fff4cc 100%);
+  color:var(--text)
+}
+    a{color:inherit}
+    .wrap{max-width:980px;margin:0 auto;padding:28px 16px 80px}
+    header{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
+    h1{margin:0;font-size:22px;letter-spacing:.2px}
+    .subtitle{margin:6px 0 0;color:var(--muted);font-size:14px;line-height:1.45}
+    .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:rgba(250,204,21,.18);padding:8px 10px;border-radius:999px;color:var(--text);font-size:12px}
+    .badge b{color:var(--accent-3)}
+    .grid{display:grid;grid-template-columns:1fr;gap:14px}
+    @media(min-width:860px){.grid{grid-template-columns: 1.25fr .75fr;align-items:start}}
+
+    .card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 12px 30px rgba(0,0,0,.12);
+  overflow:hidden
+}
+    .card .hd{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center;justify-content:space-between}
+    .card .hd h2{margin:0;font-size:14px;color:var(--text)}
+    .card .bd{padding:14px 16px}
+
+    .notice{font-size:13px;line-height:1.55;color:var(--muted)}
+    .notice strong{color:var(--text)}
+
+    .progress{height:10px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,.10)}
+    .progress>div{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+  transition:width .25s ease
+}
+    .kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .kpi .box{border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.75)}
+    .kpi .label{font-size:12px;color:var(--muted)}
+    .kpi .value{margin-top:4px;font-size:18px;font-weight:700}
+
+    .section{margin:14px 0 8px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.75)}
+    .section h3{margin:0 0 6px;font-size:13px;color:var(--text)}
+    .section p{margin:0;font-size:12px;color:var(--muted);line-height:1.5}
+
+    .q{
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#fffdf2;
+  padding:12px 12px 10px;
+  margin:10px 0
+}
+    .q .top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+    .q .n{min-width:34px;height:28px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg, var(--accent), var(--accent-2));border:1px solid var(--line);color:var(--text);font-weight:700;font-size:12px}
+    .q .txt{flex:1;font-size:14px;line-height:1.45;color:var(--text)}
+    .q .req{font-size:12px;color:var(--muted);margin-left:10px}
+
+    .opts{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+    @media(max-width:520px){.opts{grid-template-columns:1fr 1fr 1fr;}}
+    .opt{position:relative}
+    .opt input{position:absolute;opacity:0;pointer-events:none}
+    .opt label{display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 8px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.70);cursor:pointer;font-size:12px;color:var(--text);min-height:40px;transition:transform .05s ease, background .2s ease, border-color .2s ease}
+    .opt label:hover{border-color:rgba(0,0,0,.18)}
+    .opt input:checked+label{
+  background:linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-color:rgba(245,158,11,.65);
+  color:var(--text)
+}
+    .opt input:focus-visible+label{outline:2px solid rgba(245,158,11,.55);outline-offset:2px}
+
+    .actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:12px}
+    button{
+  appearance:none;
+  border:none;
+  background:linear-gradient(90deg, var(--accent), var(--accent-2));
+  color:var(--text);
+  font-weight:800;
+  border-radius:16px;
+  padding:11px 16px;
+  cursor:pointer;
+  box-shadow:0 8px 18px rgba(250,204,21,.45);
+  font-size:13px
+}
+    button.secondary{background:rgba(255,255,255,.85);border:1px solid var(--line);color:var(--text);box-shadow:none}
+    button:disabled{opacity:.5;cursor:not-allowed}
+
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.80);font-size:12px;color:var(--text)}
+    .pill .dot{width:8px;height:8px;border-radius:50%}
+
+    .result{display:none}
+    .result.show{display:block}
+    .scorebar{margin-top:10px}
+    .scorebar .row{display:flex;justify-content:space-between;align-items:center;margin:8px 0 6px}
+    .scorebar .row b{font-size:14px}
+    .scorebar .row span{font-size:12px;color:var(--muted)}
+    .meter{height:12px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);overflow:hidden}
+    .meter>div{
+  height:100%;
+  width:0%;
+  transition:width .3s ease;
+  background:linear-gradient(90deg, var(--accent), var(--accent-2))
+}
+
+    .table{width:100%;border-collapse:separate;border-spacing:0;margin-top:10px;overflow:hidden;border-radius:14px;border:1px solid var(--line)}
+    .table th,.table td{padding:10px 10px;border-bottom:1px solid var(--line);font-size:12px;color:var(--text)}
+    .table th{background:rgba(250,204,21,.18);text-align:left;color:var(--text)}
+    .table td{color:var(--text)}
+    .table tr:last-child td{border-bottom:none}
+
+    .muted{color:var(--muted)}
+    .small{font-size:12px;line-height:1.55;color:var(--muted)}
+    .divider{height:1px;background:var(--line);margin:12px 0}
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;background:rgba(255,255,255,.95);border:1px solid rgba(0,0,0,.12);padding:10px 12px;border-radius:14px;color:var(--text);font-size:13px;box-shadow:0 12px 30px rgba(0,0,0,.18);display:none;max-width:min(90vw,680px)}
+    .toast.show{display:block}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>成人 ADHD 自评测试（非诊断）</h1>
+        <p class="subtitle">回想你<strong>过去 6 个月</strong>的大多数情况，选择最符合你的频率：0=从不，1=很少，2=有时，3=经常，4=非常经常。完成后系统会给出总分、维度分布与重点提示。</p>
+      </div>
+      <div class="badge" title="此页面不会上传你的数据；结果仅在本地浏览器计算。">
+        <span>🔒</span><span>本地计算</span><span style="opacity:.6">·</span><b>不存储</b>
+      </div>
+    </header>
+
+    <div class="grid">
+      <main class="card" aria-labelledby="testTitle">
+        <div class="hd">
+          <h2 id="testTitle">答题区</h2>
+          <div class="pill" id="pillProgress"><span class="dot" style="background:#4dd4ff"></span><span><span id="answered">0</span>/25 已作答</span></div>
+        </div>
+        <div class="bd">
+          <div class="progress" aria-label="答题进度"><div id="bar"></div></div>
+          <div id="questions"></div>
+          <div class="actions">
+            <button class="secondary" id="btnReset" type="button">清空重做</button>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <span class="muted" id="hint">请完成全部 25 题后生成分析结果。</span>
+              <button id="btnAnalyze" type="button" disabled>生成分析结果</button>
+            </div>
+          </div>
+          <p class="small" style="margin:12px 0 0">
+            提醒：该测试仅作自我觉察与沟通参考，不能替代临床评估。若症状显著影响工作/学习/关系，建议咨询精神科/心理治疗师。
+          </p>
+        </div>
+      </main>
+
+      <aside class="card" aria-labelledby="resultTitle">
+        <div class="hd">
+          <h2 id="resultTitle">系统分析结果</h2>
+          <span class="pill"><span class="dot" id="dotLevel" style="background:rgba(255,255,255,.25)"></span><span id="levelText">等待作答</span></span>
+        </div>
+        <div class="bd">
+          <div id="result" class="result">
+            <div class="kpi">
+              <div class="box">
+                <div class="label">总分（0–100）</div>
+                <div class="value" id="totalScore">—</div>
+              </div>
+              <div class="box">
+                <div class="label">区间提示</div>
+                <div class="value" id="band">—</div>
+              </div>
+            </div>
+
+            <div class="section">
+              <h3>一句话画像</h3>
+              <p id="oneLiner">—</p>
+            </div>
+
+            <div class="scorebar">
+              <div class="row"><b>注意力 & 执行功能</b><span id="sInatt">—</span></div>
+              <div class="meter"><div id="mInatt"></div></div>
+
+              <div class="row"><b>冲动性</b><span id="sImp">—</span></div>
+              <div class="meter"><div id="mImp"></div></div>
+
+              <div class="row"><b>多动/内在躁动</b><span id="sHyp">—</span></div>
+              <div class="meter"><div id="mHyp"></div></div>
+
+              <div class="row"><b>时间感 & 自我管理</b><span id="sTime">—</span></div>
+              <div class="meter"><div id="mTime"></div></div>
+
+              <div class="row"><b>情绪 & 自我评价</b><span id="sMood">—</span></div>
+              <div class="meter"><div id="mMood"></div></div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h3 style="margin:0 0 8px;font-size:13px">维度明细</h3>
+            <table class="table" aria-label="维度得分明细">
+              <thead><tr><th>维度</th><th>题号</th><th>得分</th><th>强度</th></tr></thead>
+              <tbody id="detailRows"></tbody>
+            </table>
+
+            <div class="divider"></div>
+
+            <h3 style="margin:0 0 8px;font-size:13px">重点提示（可操作）</h3>
+            <ul id="tips" class="small" style="margin:0;padding-left:18px"></ul>
+          </div>
+
+          <div id="resultEmpty" class="notice">
+            <p style="margin:0 0 10px"><strong>说明：</strong>完成 25 题后，系统会在此处生成你的总分、维度雷达（条形）与重点建议。</p>
+            <div class="section">
+              <h3>评分区间</h3>
+              <p>0–25：特征不明显；26–45：有一定/明显倾向；46–65：中度倾向（建议评估）；66+：高度倾向（建议评估）。</p>
+            </div>
+            <div class="section">
+              <h3>隐私</h3>
+              <p>所有计算在浏览器本地进行；不会上传答案。你也可以导出答案（复制）再发给别人解读。</p>
+            </div>
+          </div>
+
+          <div class="actions" style="margin-top:12px">
+            <button class="secondary" id="btnCopy" type="button">复制答案</button>
+            <button class="secondary" id="btnFillDemo" type="button">填入示例</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // ====== 数据：25题，按你提供的题目（ASRS思路改编） ======
+    const QUESTIONS = [
+      // Inattention / Exec (1-8)
+      { id: 1,  text: '我很难在细节上保持专注，经常因为粗心犯错', dim: 'inatt' },
+      { id: 2,  text: '做需要持续用脑的事情（读书、写报告、开会）会让我极度疲惫或逃避', dim: 'inatt' },
+      { id: 3,  text: '别人跟我说话时，我常常“听见了但没听进去”', dim: 'inatt' },
+      { id: 4,  text: '我开始一件事很容易，但完成它很难', dim: 'inatt' },
+      { id: 5,  text: '我经常拖延，即使事情很重要、后果我也知道', dim: 'inatt' },
+      { id: 6,  text: '我容易被环境中的声音、手机、想法打断', dim: 'inatt' },
+      { id: 7,  text: '我经常忘记约定、截止日期或该做的事', dim: 'inatt' },
+      { id: 8,  text: '我的物品（钥匙、手机、文件）经常找不到', dim: 'inatt' },
+      // Impulsivity (9-13)
+      { id: 9,  text: '我会在没想清楚前就脱口而出或做决定', dim: 'imp' },
+      { id: 10, text: '我在讨论中很难忍住不插话', dim: 'imp' },
+      { id: 11, text: '我容易冲动消费、冲动答应事情', dim: 'imp' },
+      { id: 12, text: '情绪来得快，反应比别人激烈', dim: 'imp' },
+      { id: 13, text: '我常在“事后才意识到刚刚不该那样做”', dim: 'imp' },
+      // Hyperactivity / inner restlessness (14-18)
+      { id: 14, text: '我很难长时间安静地坐着不动', dim: 'hyp' },
+      { id: 15, text: '即使身体不动，脑子也一直在高速运转', dim: 'hyp' },
+      { id: 16, text: '我经常同时做很多事，但都做得不深', dim: 'hyp' },
+      { id: 17, text: '放松对我来说是一件“需要努力”的事', dim: 'hyp' },
+      { id: 18, text: '我容易感到焦躁、不耐烦，尤其在等待时', dim: 'hyp' },
+      // Time blindness (19-22)
+      { id: 19, text: '我经常严重低估完成一件事需要的时间', dim: 'time' },
+      { id: 20, text: '即使很努力，我还是常常迟到或压线完成', dim: 'time' },
+      { id: 21, text: '我的作息很难长期保持稳定', dim: 'time' },
+      { id: 22, text: '我对“未来的我”过度乐观，导致现在不行动', dim: 'time' },
+      // Mood / self-eval (23-25)
+      { id: 23, text: '我长期觉得自己“明明不笨，却一直搞砸”', dim: 'mood' },
+      { id: 24, text: '我对失败或批评异常敏感', dim: 'mood' },
+      { id: 25, text: '我很容易因为挫败而彻底放弃一件事', dim: 'mood' },
+    ];
+
+    const DIM = {
+      inatt: { name: '注意力 & 执行功能', max: 32, items: [1,2,3,4,5,6,7,8] },
+      imp:   { name: '冲动性',           max: 20, items: [9,10,11,12,13] },
+      hyp:   { name: '多动/内在躁动',    max: 20, items: [14,15,16,17,18] },
+      time:  { name: '时间感 & 自我管理',max: 16, items: [19,20,21,22] },
+      mood:  { name: '情绪 & 自我评价',  max: 12, items: [23,24,25] },
+    };
+
+    const OPTS = [
+      { v:0, t:'从不' },
+      { v:1, t:'很少' },
+      { v:2, t:'有时' },
+      { v:3, t:'经常' },
+      { v:4, t:'非常经常' },
+    ];
+
+    const state = {
+      answers: Array(25).fill(null),
+    };
+
+    // ====== 渲染题目 ======
+    const elQ = document.getElementById('questions');
+    function renderQuestions(){
+      elQ.innerHTML = '';
+      QUESTIONS.forEach(q => {
+        const wrap = document.createElement('div');
+        wrap.className = 'q';
+        wrap.innerHTML = `
+          <div class="top">
+            <div class="n">${q.id}</div>
+            <div class="txt">${q.text}</div>
+            <div class="req" id="req-${q.id}" aria-hidden="true"></div>
+          </div>
+          <div class="opts" role="radiogroup" aria-label="第${q.id}题选项">
+            ${OPTS.map(o=>{
+              const name = `q${q.id}`;
+              const id = `q${q.id}_${o.v}`;
+              return `
+                <div class="opt">
+                  <input type="radio" name="${name}" id="${id}" value="${o.v}" />
+                  <label for="${id}">${o.v} · ${o.t}</label>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+        elQ.appendChild(wrap);
+      });
+
+      // 绑定事件
+      QUESTIONS.forEach(q => {
+        document.querySelectorAll(`input[name="q${q.id}"]`).forEach(inp => {
+          inp.addEventListener('change', e => {
+            state.answers[q.id-1] = Number(e.target.value);
+            updateProgress();
+          });
+        });
+      });
+    }
+
+    // ====== 进度/按钮 ======
+    const elAnswered = document.getElementById('answered');
+    const elBar = document.getElementById('bar');
+    const btnAnalyze = document.getElementById('btnAnalyze');
+    const hint = document.getElementById('hint');
+
+    function updateProgress(){
+      const answered = state.answers.filter(v => v !== null).length;
+      elAnswered.textContent = answered;
+      elBar.style.width = `${Math.round((answered/25)*100)}%`;
+      btnAnalyze.disabled = answered !== 25;
+      hint.textContent = answered === 25 ? '已完成，可生成分析结果。' : '请完成全部 25 题后生成分析结果。';
+
+      // 清除未答标记
+      QUESTIONS.forEach(q => {
+        const el = document.getElementById(`req-${q.id}`);
+        if(!el) return;
+        el.textContent = state.answers[q.id-1] === null ? '未答' : '';
+      });
+
+      // 若未完成，隐藏结果
+      if(answered !== 25) hideResult();
+    }
+
+    // ====== 计算逻辑 ======
+    function sum(arr){return arr.reduce((a,b)=>a+b,0)}
+
+    function calc(){
+      const a = state.answers;
+      const total = sum(a);
+      const dims = {
+        inatt: sum(DIM.inatt.items.map(i=>a[i-1])),
+        imp:   sum(DIM.imp.items.map(i=>a[i-1])),
+        hyp:   sum(DIM.hyp.items.map(i=>a[i-1])),
+        time:  sum(DIM.time.items.map(i=>a[i-1])),
+        mood:  sum(DIM.mood.items.map(i=>a[i-1])),
+      };
+      const band = getBand(total);
+      const dominant = Object.entries(dims).sort((x,y)=>y[1]-x[1])[0][0];
+      const highlights = getHighlights(a);
+      const oneLiner = buildOneLiner(total, dims, dominant, highlights);
+      const tips = buildTips(total, dims, dominant, highlights);
+      return { total, dims, band, dominant, highlights, oneLiner, tips };
+    }
+
+    function getBand(total){
+      if(total <= 25) return { label:'0–25', text:'特征不明显', level:'good' };
+      if(total <= 45) return { label:'26–45', text:'有一定/明显倾向（临界偏上）', level:'warn' };
+      if(total <= 65) return { label:'46–65', text:'中度倾向（建议专业评估）', level:'warn' };
+      return { label:'66+', text:'高度倾向（强烈建议专业评估）', level:'bad' };
+    }
+
+    function levelColor(level){
+      if(level==='good') return getComputedStyle(document.documentElement).getPropertyValue('--good');
+      if(level==='warn') return getComputedStyle(document.documentElement).getPropertyValue('--warn');
+      return getComputedStyle(document.documentElement).getPropertyValue('--bad');
+    }
+
+    function intensity(score, max){
+      const r = score/max;
+      if(r < 0.33) return '低';
+      if(r < 0.66) return '中';
+      return '高';
+    }
+
+    function getHighlights(a){
+      // 返回高分题（>=3）与关键题集合
+      const high = [];
+      for(let i=0;i<a.length;i++) if(a[i] >= 3) high.push(i+1);
+      const key = {
+        exec: [4,5,19,20,21,22],
+        inner: [15,16,17,18],
+        distract: [3,6],
+      };
+      const keyHit = {
+        exec: key.exec.filter(i=>a[i-1] >= 3),
+        inner: key.inner.filter(i=>a[i-1] >= 3),
+        distract: key.distract.filter(i=>a[i-1] >= 3),
+      };
+      return { high, keyHit };
+    }
+
+    function buildOneLiner(total, dims, dominant, highlights){
+      const domName = DIM[dominant].name;
+      const { exec, inner, distract } = highlights.keyHit;
+      const parts = [];
+      parts.push(`你的得分提示你在「${domName}」维度相对更突出。`);
+      if(inner.length>=2) parts.push('同时存在较明显的“内在多动/脑内噪音”特征。');
+      if(exec.length>=2) parts.push('执行功能/时间盲点相关题出现多项高频。');
+      if(distract.length>=1) parts.push('容易被外界或思绪打断的倾向较明显。');
+      if(parts.length===1){
+        if(total<=25) parts.push('整体特征不明显，更多像情境性波动。');
+        else parts.push('整体呈现轻-中度特征，建议结合生活影响程度看。');
+      }
+      return parts.join('');
+    }
+
+    function buildTips(total, dims, dominant, highlights){
+      const tips = [];
+      const { exec, inner, distract } = highlights.keyHit;
+
+      // 通用（不以意志力为核心）
+      tips.push('把任务拆到“下一步可执行动作”（例如：打开文档→写 3 行→保存），避免只写一个大目标。');
+      tips.push('把提醒放到环境里：日历+闹钟+桌面便签三件套，尽量不要只靠记忆。');
+
+      if(dominant==='time' || dims.time/DIM.time.max >= 0.55){
+        tips.push('时间盲点优先：用“倒计时计时器/番茄钟”外化时间；每次开始前先写下预计用时，结束后校准。');
+        tips.push('把“最后期限”前移：设一个“内部截止”（比真正DDL早 24–48 小时），给自己留缓冲。');
+      }
+
+      if(dominant==='hyp' || dims.hyp/DIM.hyp.max >= 0.55 || inner.length>=2){
+        tips.push('脑内噪音/内在躁动：用“单线程工作法”（一次只保留 1 个窗口/1 个任务），并把其它想法丢进“稍后清单”。');
+        tips.push('用短休息替代硬扛：每 25–40 分钟起来走 2–3 分钟，往往比硬坐更能续航。');
+      }
+
+      if(dominant==='inatt' || dims.inatt/DIM.inatt.max >= 0.55 || distract.length>=1){
+        tips.push('减少干扰：把手机放到看不见/够不着的位置；工作时开“勿扰模式”，关闭非必要通知。');
+        tips.push('把复杂阅读改成“分段目标”：每段只回答一个问题（比如：这段的结论是什么？）。');
+      }
+
+      if(dominant==='imp' || dims.imp/DIM.imp.max >= 0.55){
+        tips.push('冲动管理：重要决定使用“延迟 10 分钟”规则（先写下理由，再决定）。');
+      }
+
+      if(dims.mood/DIM.mood.max >= 0.55){
+        tips.push('若情绪/自我评价项偏高：优先排查长期压力、睡眠与焦虑；必要时寻求专业支持。');
+      } else {
+        tips.push('情绪自评项整体较低是好信号：说明你没有把困难过度内化为“我不行”。');
+      }
+
+      // 评估建议
+      if(total >= 46){
+        tips.push('如果这些特征明显影响工作/学习/关系，建议做一次专业评估（精神科/临床心理）。');
+      } else if(total >= 26){
+        tips.push('若你在高压/睡眠不足时分数更高，建议先做 2–4 周的睡眠与压力干预，再复测对比。');
+      }
+
+      return tips;
+    }
+
+    // ====== 展示结果 ======
+    const resultBox = document.getElementById('result');
+    const resultEmpty = document.getElementById('resultEmpty');
+
+    function showResult(){
+      const r = calc();
+
+      // 顶部徽标
+      const dot = document.getElementById('dotLevel');
+      const levelText = document.getElementById('levelText');
+      dot.style.background = levelColor(r.band.level);
+      levelText.textContent = `${r.band.text}`;
+
+      // KPI
+      document.getElementById('totalScore').textContent = String(r.total);
+      document.getElementById('band').textContent = r.band.label;
+      document.getElementById('oneLiner').textContent = r.oneLiner;
+
+      // 维度条
+      setMeter('inatt', r.dims.inatt);
+      setMeter('imp', r.dims.imp);
+      setMeter('hyp', r.dims.hyp);
+      setMeter('time', r.dims.time);
+      setMeter('mood', r.dims.mood);
+
+      // 明细表
+      const rows = document.getElementById('detailRows');
+      rows.innerHTML='';
+      for(const [k,v] of Object.entries(r.dims)){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${DIM[k].name}</td>
+          <td class="muted">${DIM[k].items.join(', ')}</td>
+          <td><b>${v}</b> / ${DIM[k].max}</td>
+          <td>${intensity(v, DIM[k].max)}</td>
+        `;
+        rows.appendChild(tr);
+      }
+
+      // tips
+      const ul = document.getElementById('tips');
+      ul.innerHTML = '';
+      r.tips.forEach(t => {
+        const li = document.createElement('li');
+        li.textContent = t;
+        ul.appendChild(li);
+      });
+
+      resultEmpty.style.display = 'none';
+      resultBox.classList.add('show');
+    }
+
+    function hideResult(){
+      const dot = document.getElementById('dotLevel');
+      const levelText = document.getElementById('levelText');
+      dot.style.background = 'rgba(255,255,255,.25)';
+      levelText.textContent = '等待作答';
+      resultBox.classList.remove('show');
+      resultEmpty.style.display = 'block';
+    }
+
+    function setMeter(key, score){
+      const max = DIM[key].max;
+      const pct = Math.round((score/max)*100);
+      const elS = document.getElementById(`s${key==='inatt'?'Inatt':key==='imp'?'Imp':key==='hyp'?'Hyp':key==='time'?'Time':'Mood'}`);
+      const elM = document.getElementById(`m${key==='inatt'?'Inatt':key==='imp'?'Imp':key==='hyp'?'Hyp':key==='time'?'Time':'Mood'}`);
+      elS.textContent = `${score} / ${max}`;
+      elM.style.width = `${pct}%`;
+      // 颜色按强度
+      const lev = pct<33?'good':pct<66?'warn':'bad';
+      elM.style.background = levelColor(lev);
+    }
+
+    // ====== 校验 ======
+    function validateAll(){
+      const missing = [];
+      for(let i=0;i<25;i++) if(state.answers[i]===null) missing.push(i+1);
+      if(missing.length){
+        missing.slice(0,6).forEach(id=>{
+          const el = document.getElementById(`req-${id}`);
+          if(el) el.textContent = '未答';
+        });
+        toast(`还有 ${missing.length} 题未作答：${missing.slice(0,10).join(', ')}${missing.length>10?'…':''}`);
+        return false;
+      }
+      return true;
+    }
+
+    // ====== 交互按钮 ======
+    document.getElementById('btnAnalyze').addEventListener('click', () => {
+      if(!validateAll()) return;
+      showResult();
+      toast('已生成分析结果（仅供参考，非诊断）。');
+      // 滚动到结果
+      document.getElementById('resultTitle').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+
+    document.getElementById('btnReset').addEventListener('click', () => {
+      state.answers = Array(25).fill(null);
+      // 清空 radio
+      QUESTIONS.forEach(q => {
+        document.querySelectorAll(`input[name="q${q.id}"]`).forEach(inp => inp.checked = false);
+      });
+      updateProgress();
+      toast('已清空，可重新作答。');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+
+    document.getElementById('btnCopy').addEventListener('click', async () => {
+      const a = state.answers;
+      const lines = a.map((v,i)=>`${i+1}\t${v===null?'':v}`).join('\n');
+      const header = '题号\t答案(0-4)\n';
+      const text = header + lines;
+      try{
+        await navigator.clipboard.writeText(text);
+        toast('已复制到剪贴板。');
+      }catch(e){
+        toast('复制失败：你的浏览器可能不允许剪贴板访问。');
+      }
+    });
+
+    document.getElementById('btnFillDemo').addEventListener('click', () => {
+      // 用你朋友那份示例（可改）
+      const demo = [2,2,2,1,1,3,1,2,1,1,2,3,2,2,3,3,2,1,3,1,3,1,0,2,1];
+      state.answers = demo.slice();
+      QUESTIONS.forEach(q => {
+        const v = demo[q.id-1];
+        const el = document.getElementById(`q${q.id}_${v}`);
+        if(el) el.checked = true;
+      });
+      updateProgress();
+      showResult();
+      toast('已填入示例并生成结果。');
+    });
+
+    // ====== Toast ======
+    let toastTimer;
+    function toast(msg){
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=>el.classList.remove('show'), 2600);
+    }
+
+    // 初始化
+    renderQuestions();
+    updateProgress();
+  </script>
+</body>
+</html>
